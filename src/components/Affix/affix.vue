@@ -8,6 +8,12 @@
 <script>
 	export default {
 		name: "affix",
+		props: {
+			//传入的距离顶部
+			top: {
+				type: Number
+			},
+		},
 		data() {
 			return {
 				scroller: "",
@@ -18,35 +24,39 @@
 			//监听scroller
 			listener() {
 				let dom = document.getElementById('affix');
-				let height = dom.offsetTop;
+				let nextDom = dom.nextElementSibling;
+				let height = dom.offsetTop - this.top;
+				let _this = this;
 				if (window.attachEvent) {
 					this.scroller = window.attachEvent('onscroll', function () {
-						let pageScrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-						if (pageScrollTop > height && !this.flag) {
-							dom.style.position = "fixed";
-							dom.style.top = 0;
-							this.flag = true;
-						}
-						if (this.pageScrollTop < height && this.flag) {
-							dom.style.position = "unset";
-							dom.style.top = "unset";
-							this.flag = false
-						}
+						_this.onAffix(dom, nextDom, height, _this);
 					})
 				} else {
 					this.scroller = window.addEventListener('scroll', function () {
-						let pageScrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-						if (pageScrollTop > height && !this.flag) {
-							dom.style.position = "fixed";
-							dom.style.top = 0;
-							this.flag = true;
-						}
-						if (pageScrollTop < height && this.flag) {
-							dom.style.position = "unset";
-							dom.style.top = "unset";
-							this.flag = false
-						}
+						_this.onAffix(dom, nextDom, height, _this);
 					})
+				}
+			},
+			//执行图钉效果
+			onAffix(dom, nextDom, height, _this) {
+				let pageScrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+				//到达固定位置
+				if (pageScrollTop > height && !this.flag) {
+					dom.style.position = "fixed";
+					dom.style.zIndex = 99;
+					dom.style.top = _this.top + 'px';
+					this.flag = true;
+					//执行之后的回调方法
+					this.$emit('affixFunc');
+				}
+				//恢复原来位置
+				if (pageScrollTop < height && this.flag) {
+					dom.style.position = "inherit";
+					dom.style.zIndex = 1;
+					dom.style.top = "inherit";
+					this.flag = false;
+					//恢复之后的回调方法
+					this.$emit('backFunc')
 				}
 			}
 		},
