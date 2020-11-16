@@ -8,9 +8,9 @@
  * @params key查找的字段键名
  * */
 function getSearchUrl(key) {
-	var search = window.location.search;
-	var search_data = search.substr(1, search.length);
-	var data = search_data.split('&');
+	let search = window.location.search;
+	let search_data = search.substr(1, search.length);
+	let data = search_data.split('&');
 	data.forEach((item, index) => {
 		let arr = item.split('=');
 		if (key === arr[0]) {
