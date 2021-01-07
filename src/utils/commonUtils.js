@@ -20,3 +20,44 @@ function getSearchUrl(key) {
 		}
 	})
 }
+
+/**
+ * 深度拷贝deepClone
+ * @params obj数据
+ * */
+function deepClone(obj) {
+	//获取数据类型
+	let type = getType(obj);
+	//非数组或对象直接返回数据
+	if (type !== 'Array' || type !== 'Object') return obj;
+	let outPut;
+	if (type === 'Array') {
+		// 数组类型
+		outPut = [];
+		obj.forEach((v, i) => {
+			let currType = getType(v);
+			if (currType === 'Array' || currType === 'Object') {
+				outPut.push(deepClone(v));
+			} else {
+				outPut.push(v);
+			}
+		})
+	} else if (type === 'Object') {
+		// 对象类型
+		outPut = {};
+		Object.keys(obj).forEach((v, i) => {
+			let currType = getType(v);
+			if (currType === 'Array' || currType === 'Object') {
+				outPut[v] = (deepClone(obj[v]));
+			} else {
+				outPut[v] = obj[v];
+			}
+		})
+	}
+	return outPut;
+}
+
+//获取数据类型
+function getType(obj) {
+	return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '');
+}
