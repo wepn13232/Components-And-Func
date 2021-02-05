@@ -16,7 +16,6 @@ Vue.directive('affix', {
 		let final_height = el_offsetTop - user_defined_height;
 		//添加滚动监听
 		let scroller = window.addEventListener('scroll', throttle(function() {
-			console.log('监听滚动')
 			//获取滚动高度
 			let win_scroll_height = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 			//滚到到对应高度的时候操作
