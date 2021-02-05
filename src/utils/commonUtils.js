@@ -75,3 +75,16 @@ function throttle(fn, delay, scope) {
 		}
 	}
 }
+
+//防抖函数
+function debounce(fn, deplay, scope) {
+	let timer = null;
+	return function () {
+		let context = scope || this, args = arguments;
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			fn.apply(context, args)
+		}, deplay)
+	};
+
+}
