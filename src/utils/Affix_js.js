@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import commonUtils from '../utils/commonUtils'
 
 /**
  * 这个针对于Vue自定义指令，自定义一个v-affix来实现固定（图钉）功能
@@ -14,10 +15,10 @@ Vue.directive('affix', {
 		let el_offsetTop = el.offsetTop;
 		let final_height = el_offsetTop - user_defined_height;
 		//添加滚动监听
-		let scroller = window.addEventListener('scroll', function () {
+		let scroller = window.addEventListener('scroll', throttle(function() {
+			console.log('监听滚动')
 			//获取滚动高度
 			let win_scroll_height = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-			console.log('滚动高度---->', win_scroll_height, '用户定义的高度--->', user_defined_height, '最终需要固定高度---->', final_height);
 			//滚到到对应高度的时候操作
 			if (win_scroll_height > final_height && !flag) {
 				el.style.position = "fixed";
@@ -34,6 +35,20 @@ Vue.directive('affix', {
 				el.style.marginTop = init_marginTop + 'px';
 				flag = false;
 			}
-		});
+		}, 100));
 	},
 });
+
+//节流函数
+function throttle(fn, delay, scope) {
+	var timer = null;
+	return function () {
+		var context = scope || this, args = arguments;
+		if (!timer) {
+			timer = setTimeout(() => {
+				fn.apply(context, args);
+				timer = null;
+			}, delay)
+		}
+	}
+}

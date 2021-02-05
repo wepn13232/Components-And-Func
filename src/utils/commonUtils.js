@@ -61,3 +61,17 @@ function deepClone(obj) {
 function getType(obj) {
 	return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, '');
 }
+
+//节流函数
+function throttle(fn, delay, scope) {
+	var timer = null;
+	return function () {
+		var context = scope || this, args = arguments;
+		if (!timer) {
+			timer = setTimeout(() => {
+				fn.apply(context, args);
+				timer = null;
+			}, delay)
+		}
+	}
+}
