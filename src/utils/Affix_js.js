@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import commonUtils from '../utils/commonUtils'
 
 /**
  * 这个针对于Vue自定义指令，自定义一个v-affix来实现固定（图钉）功能
